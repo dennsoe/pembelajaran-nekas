@@ -43,6 +43,9 @@ class User extends Authenticatable
         'division_id',
         'job_title_id',
         'profile_photo_path',
+        'face_encoding',
+        'face_photo_path',
+        'is_active',
     ];
 
     /**
@@ -78,14 +81,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'birth_date' => 'datetime:Y-m-d',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
-    public static $groups = ['user', 'admin', 'superadmin'];
+    public static $groups = ['guru', 'kurikulum', 'kepala_sekolah', 'admin', 'superadmin'];
 
-    final public function getIsUserAttribute(): bool
+    final public function getIsGuruAttribute(): bool
     {
-        return $this->group === 'user';
+        return $this->group === 'guru';
+    }
+
+    final public function getIsKurikulumAttribute(): bool
+    {
+        return $this->group === 'kurikulum';
+    }
+
+    final public function getIsKepalaSekolahAttribute(): bool
+    {
+        return $this->group === 'kepala_sekolah';
     }
 
     final public function getIsAdminAttribute(): bool
@@ -121,5 +135,40 @@ class User extends Authenticatable
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'teacher_id');
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class, 'teacher_id');
+    }
+
+    public function approvedLeaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class, 'approved_by');
+    }
+
+    public function originalSubstitutions()
+    {
+        return $this->hasMany(SubstituteTeacher::class, 'original_teacher_id');
+    }
+
+    public function substituteAssignments()
+    {
+        return $this->hasMany(SubstituteTeacher::class, 'substitute_teacher_id');
+    }
+
+    public function validatedAttendances()
+    {
+        return $this->hasMany(Attendance::class, 'validated_by');
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

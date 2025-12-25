@@ -20,14 +20,29 @@ class Attendance extends Model
 
     protected $fillable = [
         'user_id',
+        'schedule_id',
+        'qr_code_id',
         'barcode_id',
         'date',
         'time_in',
         'time_out',
+        'method_in',
+        'method_out',
+        'latitude_in',
+        'longitude_in',
+        'latitude_out',
+        'longitude_out',
+        'face_photo_in',
+        'face_photo_out',
+        'face_match_score_in',
+        'face_match_score_out',
         'shift_id',
         'latitude',
         'longitude',
         'status',
+        'validated_by',
+        'validated_at',
+        'validation_status',
         'note',
         'attachment',
     ];
@@ -38,12 +53,34 @@ class Attendance extends Model
             'date' => 'datetime:Y-m-d',
             'time_in' => 'datetime:H:i:s',
             'time_out' => 'datetime:H:i:s',
+            'validated_at' => 'datetime',
+            'latitude_in' => 'decimal:7',
+            'longitude_in' => 'decimal:7',
+            'latitude_out' => 'decimal:7',
+            'longitude_out' => 'decimal:7',
+            'face_match_score_in' => 'decimal:2',
+            'face_match_score_out' => 'decimal:2',
         ];
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function qrCode()
+    {
+        return $this->belongsTo(QrCode::class);
+    }
+
+    public function validator()
+    {
+        return $this->belongsTo(User::class, 'validated_by');
     }
 
     public function barcode()
