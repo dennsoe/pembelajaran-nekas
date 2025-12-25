@@ -30,6 +30,7 @@ class User extends Authenticatable
         'nip',
         'name',
         'email',
+        'google_id',
         'password',
         'raw_password',
         'group',

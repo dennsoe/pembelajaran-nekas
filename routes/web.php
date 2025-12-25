@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\MasterDataController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ImportExportController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAttendanceController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
@@ -26,6 +27,10 @@ Route::get('/', function () {
     // return view('welcome');
     return redirect('/login');
 });
+
+// Google OAuth Routes
+Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 Route::middleware([
     'auth:sanctum',

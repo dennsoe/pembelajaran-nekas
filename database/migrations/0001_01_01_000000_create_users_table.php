@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nip')->nullable();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('google_id')->nullable()->unique(); // Google OAuth ID
             $table->string('phone');
             $table->enum('gender', ['male', 'female']);
             $table->date('birth_date')->nullable(); // tanggal lahir
